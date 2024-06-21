@@ -1,0 +1,22 @@
+/* En tu archivo CSS */
+@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@400;700&display=swap');
+body {
+    font-family: 'Rubik', sans-serif;
+}
+
+.navbar {
+    margin-bottom: 20px;
+}
+
+.jumbotron {
+    background-color: #efefef;
+    padding: 2rem 1rem;
+}
+
+.container {
+    padding-top: 20px;
+}
+
+.alert {
+    margin-top: 20px;
+}

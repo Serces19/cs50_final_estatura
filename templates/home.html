@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="jumbotron">
+    <h1 class="display-4">Bienvenido a Estatura Gráfica</h1>
+    <p class="lead">Controle y visualice la evolución de la estatura de sus hijos a lo largo de los años.</p>
+    <hr class="my-4">
+    <a class="btn btn-primary btn-lg" href="{{ url_for('register') }}" role="button">Registrarse</a>
+</div>
+{% endblock %}

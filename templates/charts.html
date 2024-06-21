@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <h2>Gráficas de Estatura</h2>
+        <canvas id="heightChart" width="400" height="200"></canvas>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const ctx = document.getElementById('heightChart').getContext('2d');
+    const data = {
+        labels: {{ records | map(attribute='date') | list | tojson }},
+        datasets: [{
+            label: 'Estatura (cm)',
+            data: {{ records | map(attribute='height') | list | tojson }},
+            borderColor: 'rgba(75, 192, 192, 1)',
+            borderWidth: 1
+        }]
+    };
+    const config = {
+        type: 'line',
+        data: data,
+    };
+    const heightChart = new Chart(ctx, config);
+</script>
+{% endblock %}
