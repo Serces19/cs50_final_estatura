@@ -1,10 +1,77 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="jumbotron">
-    <h1 class="display-4">Bienvenido a Estatura Gráfica</h1>
-    <p class="lead">Controle y visualice la evolución de la estatura de sus hijos a lo largo de los años.</p>
+<div class="jumbotron text-center">
+    <h1 class="display-4 text-light">Bienvenido a Estatura Gráfica</h1>
+    <p class="lead text-light">Controle y visualice la evolución de la estatura de sus hijos a lo largo de los años.</p>
     <hr class="my-4">
+    <p class="text-light">En un país como Bolivia, puede ser complicado para muchas familias acceder a servicios médicos de calidad. Nuestra herramienta permite llevar un control preciso de la estatura de sus hijos y almacenar estos datos en línea para su acceso a lo largo de los años.</p>
     <a class="btn btn-primary btn-lg" href="{{ url_for('register') }}" role="button">Registrarse</a>
+</div>
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card">
+                <img src="https://via.placeholder.com/150" class="card-img-top" alt="Control de Estatura">
+                <div class="card-body">
+                    <h5 class="card-title">Control de Estatura</h5>
+                    <p class="card-text">Registra y sigue la evolución de la estatura de tus hijos de manera sencilla y accesible.</p>
+                    <a href="{{ url_for('register') }}" class="btn btn-primary">Comenzar</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <img src="https://via.placeholder.com/150" class="card-img-top" alt="Gráficas Interactivas">
+                <div class="card-body">
+                    <h5 class="card-title">Gráficas Interactivas</h5>
+                    <p class="card-text">Visualiza el progreso de tus hijos con gráficas claras e interactivas.</p>
+                    <a href="{{ url_for('charts') }}" class="btn btn-primary">Ver Gráficas</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <img src="https://via.placeholder.com/150" class="card-img-top" alt="Acceso Seguro">
+                <div class="card-body">
+                    <h5 class="card-title">Acceso Seguro</h5>
+                    <p class="card-text">Tus datos están protegidos y solo tú puedes acceder a ellos mediante un sistema de autenticación robusto.</p>
+                    <a href="{{ url_for('login') }}" class="btn btn-primary">Iniciar Sesión</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col text-center">
+            <h2>Características Principales</h2>
+            <p class="lead">Nuestra herramienta ofrece varias características para ayudarte a llevar un control eficiente y seguro de la estatura de tus hijos.</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3 text-center">
+            <i class="fas fa-chart-line fa-3x mb-3"></i>
+            <h5>Gráficas Detalladas</h5>
+            <p>Visualiza el crecimiento de tus hijos a través de gráficas detalladas y fáciles de entender.</p>
+        </div>
+        <div class="col-md-3 text-center">
+            <i class="fas fa-user-shield fa-3x mb-3"></i>
+            <h5>Privacidad y Seguridad</h5>
+            <p>Tus datos están seguros con nosotros. Solo tú tienes acceso a ellos.</p>
+        </div>
+        <div class="col-md-3 text-center">
+            <i class="fas fa-mobile-alt fa-3x mb-3"></i>
+            <h5>Acceso Móvil</h5>
+            <p>Accede y actualiza la información desde cualquier dispositivo móvil.</p>
+        </div>
+        <div class="col-md-3 text-center">
+            <i class="fas fa-users fa-3x mb-3"></i>
+            <h5>Multiusuario</h5>
+            <p>Administra múltiples perfiles de niños en una sola cuenta.</p>
+        </div>
+    </div>
 </div>
 {% endblock %}

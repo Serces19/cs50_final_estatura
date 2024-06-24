@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Dashboard</h2>
+    <div class="row mb-4">
+        <div class="col">
+            <a href="{{ url_for('create_record') }}" class="btn btn-primary">Agregar Nuevo Registro</a>
+        </div>
+    </div>
+    {% if records %}
+    <div class="row">
+        <div class="col">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Estatura (cm)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for record in records %}
+                    <tr>
+                        <td>{{ record.date }}</td>
+                        <td>{{ record.height }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% else %}
+    <div class="row">
+        <div class="col">
+            <p>No hay registros disponibles. Comience agregando un nuevo registro.</p>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
