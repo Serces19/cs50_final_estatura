@@ -5,7 +5,7 @@
     <h2>Dashboard</h2>
     <div class="row mb-4">
         <div class="col">
-            <a href="{{ url_for('create_record') }}" class="btn btn-primary">Agregar Nuevo Registro</a>
+            <a href="{{ url_for('create_record') }}" class="btn btn-primary">Agregar Registro</a>
         </div>
     </div>
     {% if records %}
@@ -21,7 +21,7 @@
                 <tbody>
                     {% for record in records %}
                     <tr>
-                        <td>{{ record.date }}</td>
+                        <td>{{ record.month }}</td>
                         <td>{{ record.height }}</td>
                     </tr>
                     {% endfor %}

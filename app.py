@@ -20,8 +20,9 @@ class User(db.Model):
 
 class Record(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(30), nullable=False)
     height = db.Column(db.Float, nullable=False)
-    date = db.Column(db.String(10), nullable=False)
+    month = db.Column(db.Integer, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
 ##################################################################################################################
@@ -64,17 +65,19 @@ def dashboard():
     if 'user_id' not in session:
         return redirect(url_for('login'))
     user_id = session['user_id']
-    records = Record.query.filter_by(user_id=user_id).all()
+    records = Record.query.filter_by(user_id=user_id).order_by(Record.month.asc()).all()
     return render_template('dashboard.html', records=records)
 
 
 @app.route('/create_record', methods=['GET', 'POST'])
 def create_record():
     if request.method == 'POST':
+        name = request.form['name']
         height = request.form['height']
-        date = request.form['date']
+        month = request.form['month']
         user_id = session['user_id']
-        new_record = Record(height=height, date=date, user_id=user_id)
+        print(name, height, month, user_id)
+        new_record = Record(height=height, month=month, name=name, user_id=user_id)
         db.session.add(new_record)
         db.session.commit()
         return redirect(url_for('dashboard'))
@@ -86,8 +89,13 @@ def charts():
     if 'user_id' not in session:
         return redirect(url_for('login'))
     user_id = session['user_id']
-    records = Record.query.filter_by(user_id=user_id).all()
-    return render_template('charts.html', records=records)
+    records = Record.query.filter_by(user_id=user_id).order_by(Record.month.asc()).all()
+
+    # Datos esperados
+    meses_esperado = [0, 6, 12, 24, 36, 48, 60, 72, 84, 96, 108, 120, 132, 144, 156, 168, 180, 192, 204, 216, 228, 240]
+    estatura_esperado = [50, 64.5, 72.7, 82, 90.3, 96.9, 103.8, 108.8, 114.9, 120.5, 125.8, 130.5, 134.5, 140, 146, 153.5, 159.5, 163.5, 166, 167, 167.5, 167.9]
+    
+    return render_template('charts.html', records=records, meses_esperado=meses_esperado, estatura_esperado=estatura_esperado)
 
 
 @app.route('/logout')

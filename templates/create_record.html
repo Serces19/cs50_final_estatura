@@ -6,15 +6,53 @@
         <h2>Crear Registro de Estatura</h2>
         <form method="POST" action="{{ url_for('create_record') }}">
             <div class="form-group">
-                <label for="height">Estatura (cm):</label>
-                <input type="number" step="0.01" class="form-control" id="height" name="height" required>
+                <label for="name">Nombre de la persona:</label>
+                <select name="name" id="name">
+                    <option value="persona1">Oliver</option>
+                    <option value="persona2">Persona 1</option>
+                    <option value="persona3">Persona 2</option>
+                </select>
             </div>
+    
+            <div class="form-group checkbox-group">
+                <input type="checkbox" id="registrar_por_meses" onclick="toggleFechaMedicion()">
+                <label for="registrar_por_meses">Registrar por edad en meses</label>
+            </div>
+    
+            <div class="form-group" id="fecha_medicion_group">
+                <label for="fecha_medicion"> Fecha de medición: </label>
+                <input type="date" class="form-control" id="fecha_medicion" name="fecha_medicion">
+            </div>
+    
+            <div class="form-group" id="edad_meses_group" style="display: none;">
+                <label for="edad_meses">Edad en meses:</label>
+                <input type="number" id="month" class="form-control" min="0" name="month" step="1">
+            </div>
+    
             <div class="form-group">
-                <label for="date">Fecha:</label>
-                <input type="date" class="form-control" id="date" name="date" required>
+                <label for="height">Estatura (cm):</label>
+                <input type="number" id="height" step="0.1" min="0" class="form-control" name="height" required>
             </div>
+    
             <button type="submit" class="btn btn-primary">Guardar</button>
         </form>
+    
+        <script>
+            function toggleFechaMedicion() {
+                const registrarPorMeses = document.getElementById('registrar_por_meses').checked;
+                const fechaMedicionGroup = document.getElementById('fecha_medicion_group');
+                const edadMesesGroup = document.getElementById('edad_meses_group');
+                
+                if (registrarPorMeses) {
+                    fechaMedicionGroup.style.display = 'none';
+                    edadMesesGroup.style.display = 'block';
+                } else {
+                    fechaMedicionGroup.style.display = 'block';
+                    edadMesesGroup.style.display = 'none';
+                }
+            }
+        </script>
     </div>
 </div>
 {% endblock %}
+
