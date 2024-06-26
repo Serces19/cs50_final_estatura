@@ -14,8 +14,9 @@
             <table class="table table-striped">
                 <thead>
                     <tr>
-                        <th>Fecha</th>
+                        <th>Edad (meses)</th>
                         <th>Estatura (cm)</th>
+                        <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -23,6 +24,11 @@
                     <tr>
                         <td>{{ record.month }}</td>
                         <td>{{ record.height }}</td>
+                        <td>
+                            <form action="{{ url_for('delete_record', record_id=record.id) }}" method="post" style="display:inline;">
+                                <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                            </form>
+                        </td>
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -38,3 +44,4 @@
     {% endif %}
 </div>
 {% endblock %}
+

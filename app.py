@@ -98,6 +98,24 @@ def charts():
     return render_template('charts.html', records=records, meses_esperado=meses_esperado, estatura_esperado=estatura_esperado)
 
 
+@app.route('/delete_record/<int:record_id>', methods=['POST'])
+def delete_record(record_id):
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+    
+    current_user = session['user_id']
+
+    record = Record.query.get_or_404(record_id)
+    if record.user_id != current_user:
+        flash('No tiene permiso para realizar esta acción', 'danger')
+        return redirect(url_for('dashboard'))
+    
+    db.session.delete(record)
+    db.session.commit()
+    flash('Registro eliminado correctamente', 'success')
+    return redirect(url_for('dashboard'))
+
+
 @app.route('/logout')
 def logout():
     session.pop('user_id', None)

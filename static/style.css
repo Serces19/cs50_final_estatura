@@ -48,7 +48,6 @@ button:active {
 }
 
 
-
 .content {
     flex: 1;
     padding:5%;
@@ -57,6 +56,8 @@ button:active {
 .navbar {
     margin-bottom: 20px;
     font-weight: bolder;
+    display: flex; 
+    justify-content: center;
 }
 
 .jumbotron {

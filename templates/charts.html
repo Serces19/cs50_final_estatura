@@ -4,40 +4,95 @@
 <div class="row justify-content-center">
     <div class="col-md-8">
         <h2>Gráficas de Estatura</h2>
-        <canvas id="heightChart" width="800" height="400"></canvas>
     </div>
 </div>
 
 
 <div class="container mt-4">
-    <canvas id="heightChart"></canvas>
+    <canvas id="myChart" width="400" height="200"></canvas>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        const ctx = document.getElementById('heightChart').getContext('2d');
-        const data = {
-            labels: {{ records | map(attribute='date') | list | tojson }},
-            datasets: [
-                {
-                    label: 'Estatura (cm)',
-                    data: {{ records | map(attribute='height') | list | tojson }},
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    borderWidth: 3
-                },
-                {
-                    label: 'Estatura Esperada (cm)',
-                    data: {{ estatura_esperado | tojson }},
-                    borderColor: 'rgba(255, 99, 132, 1)',
-                    borderWidth: 2,
-                    borderDash: [5, 5],
-                    fill: false
-                }
-            ]
-        };
-        const config = {
+
+        // Datos de ejemplo
+        const meses_esperado = [0, 6, 12, 24, 36, 48, 60, 72, 84, 96, 108, 120, 132, 144, 156, 168, 180, 192, 204, 216, 228, 240];
+        const estatura_esperado = [50, 64.5, 72.7, 82, 90.3, 96.9, 103.8, 108.8, 114.9, 120.5, 125.8, 130.5, 134.5, 140, 146, 153.5, 159.5, 163.5, 166, 167, 167.5, 167.9];
+
+        const heights = {{ records | map(attribute='height') | list }};
+        const months = {{ records | map(attribute='month') | list }};
+        console.log(heights);
+        console.log(months);
+
+
+        // Crear el gráfico con Chart.js
+        const ctx = document.getElementById('myChart').getContext('2d');
+        const myChart = new Chart(ctx, {
             type: 'line',
-            data: data,
-        };
-        const heightChart = new Chart(ctx, config);
+            data: {
+                datasets: [
+                    {
+                        label: 'Actual',
+                        data: months.map((month, index) => ({ x: month, y: heights[index] })),
+                        borderColor: 'rgba(70, 180, 230, 0.8)',
+                        borderWidth: 3,
+                        fill: true
+                    },
+                    {
+                        label: 'Esperada',
+                        data: meses_esperado.map((month, index) => ({ x: month, y: estatura_esperado[index] })),
+                        borderColor: 'rgba(255, 99, 132, 0.5)',
+                        borderWidth: 3,
+                        borderDash: [5, 5],
+                        fill: false
+                    },
+                ]
+            },
+            options: {
+                scales: {
+                    x: {
+                        type: 'linear',
+                        position: 'bottom',
+                        title: {
+                            display: true,
+                            text: 'Edad (meses)',
+                            font: {
+                                size: 20,
+                                weight: 'bold'
+                            }
+                        },
+                        ticks: {
+                            stepSize: 12 
+                        }
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'Estatura (cm)',
+                            font: {
+                                size: 20,
+                                weight: 'bold'
+                            }
+                        },
+                        ticks: {
+                            stepSize: 10 
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: true,
+                        labels: {
+                            font: {
+                                size: 16,
+                            }
+                        }
+                    }
+                },
+                interaction: {
+                    mode: 'index',
+                    intersect: false
+                }
+            }
+        });
     </script>
 </div>
 
