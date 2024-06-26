@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <h2>Crear nueva persona</h2>
+        <form method="POST" action="{{ url_for('create_child') }}">
+            <label for="nombre">Nombre:</label>
+            <input type="text" class="form-control" id="nombre" name="name"><br>
+        
+            <label for="genero">Género:</label>
+            <input type="radio" class="form-control" id="genero_masculino" name="gender" value="masculino">
+            <label for="genero_masculino">Masculino</label>
+            <input type="radio" class="form-control" id="genero_femenino" name="gender" value="femenino">
+            <label for="genero_femenino">Femenino</label><br>
+        
+            <label for="fecha_nacimiento">Fecha de nacimiento:</label>
+            <input type="date" class="form-control" id="fecha_nacimiento" name="fecha_nacimiento"><br>
+        
+            <label for="estatura_padre">Estatura del padre (cm):</label>
+            <input type="number" class="form-control" id="estatura_padre" name="estatura_padre"><br>
+        
+            <label for="estatura_madre">Estatura de la madre (cm):</label>
+            <input type="number" class="form-control" id="estatura_madre" name="estatura_madre"><br>
+        
+            <label for="ciudad">Ciudad:</label>
+            <input type="text" class="form-control" id="ciudad" name="ciudad"><br>
+        
+            <div class="form-group">
+                <label for="residencia">Lugar de residencia:</label>
+                <select id="residencia" name="residencia" class="form-control">
+                    <option value="centro_ciudad">Centro de la ciudad</option>
+                    <option value="zona_residencial">Zona residencial</option>
+                    <option value="alejado_ciudad">Alejado de la ciudad</option>
+                    <option value="zona_rural">Zona rural</option>
+                </select><br>
+            </div>
+            <input type="submit" class="btn btn-primary" value="Enviar">
+
+        </form>
+    
+        <script>
+            function toggleFechaMedicion() {
+                const registrarPorMeses = document.getElementById('registrar_por_meses').checked;
+                const fechaMedicionGroup = document.getElementById('fecha_medicion_group');
+                const edadMesesGroup = document.getElementById('edad_meses_group');
+                
+                if (registrarPorMeses) {
+                    fechaMedicionGroup.style.display = 'none';
+                    edadMesesGroup.style.display = 'block';
+                } else {
+                    fechaMedicionGroup.style.display = 'block';
+                    edadMesesGroup.style.display = 'none';
+                }
+            }
+        </script>
+    </div>
+</div>
+{% endblock %}
+

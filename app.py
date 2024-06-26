@@ -15,7 +15,20 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(60), nullable=False)
-    records = db.relationship('Record', backref='user', lazy=True)
+    children = db.relationship('Child', backref='user', lazy=True)
+
+
+class Child(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(30), nullable=False)
+    gender = db.Column(db.String(12), nullable=False)
+    fecha_nacimiento = db.Column(db.Integer, nullable=False)
+    estatura_padre = db.Column(db.Integer, nullable=False)
+    estatura_madre = db.Column(db.Integer, nullable=False)
+    ciudad = db.Column(db.String(30), nullable=False)
+    residencia = db.Column(db.String(30), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    records = db.relationship('Record', backref='child', lazy=True)
 
 
 class Record(db.Model):
@@ -23,7 +36,8 @@ class Record(db.Model):
     name = db.Column(db.String(30), nullable=False)
     height = db.Column(db.Float, nullable=False)
     month = db.Column(db.Integer, nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    child_id = db.Column(db.Integer, db.ForeignKey('child.id'), nullable=False)
+
 
 ##################################################################################################################
 
@@ -65,7 +79,29 @@ def dashboard():
     if 'user_id' not in session:
         return redirect(url_for('login'))
     user_id = session['user_id']
-    records = Record.query.filter_by(user_id=user_id).order_by(Record.month.asc()).all()
+
+    # Obtener todos los hijos del usuario
+    children = Child.query.filter_by(user_id=user_id).all()
+
+    if not children:
+        records = []
+        return render_template('dashboard.html', records=records)
+
+
+    # Obtener el id del Child
+    child_id = Child.query.filter_by(name='Oliver').first().id
+
+    # Obtener todos los registros del Child
+    records = Record.query.filter_by(child_id=child.id).order_by(Record.month.asc()).all()
+
+    # # Obtener todos los registros de los hijos del usuario, incluyendo el nombre del hijo
+    # records_with_child_names = []
+    # for child in children:
+    #     records = Record.query.filter_by(child_id=child.id).order_by(Record.month.asc()).all()
+    #     for record in records:
+    #         records_with_child_names.append((record, child.name))
+
+    #records = Record.query.filter_by(user_id=user_id).order_by(Record.month.asc()).all()
     return render_template('dashboard.html', records=records)
 
 
@@ -75,13 +111,33 @@ def create_record():
         name = request.form['name']
         height = request.form['height']
         month = request.form['month']
-        user_id = session['user_id']
+        child_id = session['user_id']
         print(name, height, month, user_id)
-        new_record = Record(height=height, month=month, name=name, user_id=user_id)
+        new_record = Record(height=height, month=month, name=name, child_id=child_id)
         db.session.add(new_record)
         db.session.commit()
         return redirect(url_for('dashboard'))
     return render_template('create_record.html')
+
+
+@app.route('/create_child', methods=['GET', 'POST'])
+def create_child():
+    if request.method == 'POST':
+        name = request.form['name']
+        gender = request.form['gender']
+        fecha_nacimiento = request.form['fecha_nacimiento']
+        estatura_padre = request.form['estatura_padre']
+        estatura_madre = request.form['estatura_madre']
+        ciudad = request.form['ciudad']
+        residencia = request.form['residencia']
+        user_id = session['user_id']
+
+        print(name, gender, fecha_nacimiento, estatura_padre, estatura_madre, ciudad, residencia)
+        new_child = Record(name=name, user_id=user_id, gender=gender, fecha_nacimiento=fecha_nacimiento, estatura_padre=estatura_padre, estatura_madre=estatura_madre, ciudad=ciudad, residencia=residencia)
+        db.session.add(new_child)
+        db.session.commit()
+        return redirect(url_for('dashboard'))
+    return render_template('create_child.html')
 
 
 @app.route('/charts')
