@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Dashboard</h2>
+    <div class="row mb-4">
+        <div class="col">
+            <a href="{{ url_for('create_child') }}" class="btn btn-primary">Agregar persona</a>
+        </div>
+    </div>
+    {% if records %}
+    <div class="row">
+        <div class="col">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Edad (meses)</th>
+                        <th>Estatura (cm)</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for record in records %}
+                    <tr>
+                        <td>{{ record.month }}</td>
+                        <td>{{ record.height }}</td>
+                        <td>
+                            <form action="{{ url_for('delete_record', record_id=record.id) }}" method="post" style="display:inline;">
+                                <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% else %}
+    <div class="row">
+        <div class="col">
+            <p>No hay registros disponibles. Comience agregando un nuevo registro.</p>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+

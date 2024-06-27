@@ -7,44 +7,89 @@
     </div>
 </div>
 
-
 <div class="container mt-4">
     <canvas id="myChart" width="400" height="200"></canvas>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
 
-        // Datos de ejemplo
-        const meses_esperado = [0, 6, 12, 24, 36, 48, 60, 72, 84, 96, 108, 120, 132, 144, 156, 168, 180, 192, 204, 216, 228, 240];
-        const estatura_esperado = [50, 64.5, 72.7, 82, 90.3, 96.9, 103.8, 108.8, 114.9, 120.5, 125.8, 130.5, 134.5, 140, 146, 153.5, 159.5, 163.5, 166, 167, 167.5, 167.9];
 
-        const heights = {{ records | map(attribute='height') | list }};
-        const months = {{ records | map(attribute='month') | list }};
-        console.log(heights);
-        console.log(months);
+        /////////////////////////////  Funciones  /////////////////////////////////// 
+        function GetMonths(name, records) {
+            let months = [];
+            records.forEach(record => {
+                // Obtener los datos específicos del registro
+                if (name == record.name)
+                    {
+                    // Agregar elemento al array
+                    months.push(record.month);
+                    }
+            });
+
+            return months;
+        }
+
+        function GetHieght(name, records) {
+            let heights = [];
+            records.forEach(record => {
+                if (name == record.name)
+                {
+                    // Agregar elemento al array
+                    heights.push(record.height);
+                }
+            })
+            return heights;
+        }
+
+        /////////////////////////////  Datos  /////////////////////////////////// 
+        const meses_esperado = {{ meses_esperado|safe}};
+        const estatura_esperado = {{ estatura_esperado|safe}};
+        const children = {{ children | safe }};
+        const records = {{ records | safe }};
+
+        console.log(records);
+        console.log(children);
+
+        
+        /////////////////////////////  Crear lista datasets  /////////////////////////////////// 
+        let datasets = [];
+        let expectedDataset = {
+            label: 'Esperada',
+            data: meses_esperado.map((month, index) => ({ x: month, y: estatura_esperado[index] })),
+            borderColor: 'rgba(255, 99, 132, 0.5)',
+            borderWidth: 3,
+            borderDash: [5, 5],
+            fill: false
+        };
+        datasets.push(expectedDataset);
+
+        children.forEach(child => {
+            console.log(child);
+            // Obtener los datos específicos del registro
+            let months = GetMonths(child, records);
+            let heights = GetHieght(child, records);
+
+            // Crear un nuevo dataset para este registro
+            let newDataset = {
+                label: child,
+                data: months.map((month, index) => ({ x: month, y: heights[index] })), 
+                borderColor: 'rgba(70, 180, 230, 0.8)',
+                borderWidth: 3,
+                fill: true
+            };
+
+            // Agregar el nuevo dataset a la lista de datasets
+            datasets.push(newDataset);
+        });
+
+        console.log(datasets);
 
 
-        // Crear el gráfico con Chart.js
+        /////////////////////////////  Crear el gráfico con Chart.js  /////////////////////////////////// 
         const ctx = document.getElementById('myChart').getContext('2d');
         const myChart = new Chart(ctx, {
             type: 'line',
             data: {
-                datasets: [
-                    {
-                        label: 'Actual',
-                        data: months.map((month, index) => ({ x: month, y: heights[index] })),
-                        borderColor: 'rgba(70, 180, 230, 0.8)',
-                        borderWidth: 3,
-                        fill: true
-                    },
-                    {
-                        label: 'Esperada',
-                        data: meses_esperado.map((month, index) => ({ x: month, y: estatura_esperado[index] })),
-                        borderColor: 'rgba(255, 99, 132, 0.5)',
-                        borderWidth: 3,
-                        borderDash: [5, 5],
-                        fill: false
-                    },
-                ]
+                datasets: datasets
             },
             options: {
                 scales: {
@@ -93,6 +138,8 @@
                 }
             }
         });
+
+
     </script>
 </div>
 

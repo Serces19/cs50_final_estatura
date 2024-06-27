@@ -8,9 +8,9 @@
             <div class="form-group">
                 <label for="name">Nombre de la persona:</label>
                 <select name="name" id="name" class="form-control">
-                    <option value="persona1">Oliver</option>
-                    <option value="persona2">Persona 1</option>
-                    <option value="persona3">Persona 2</option>
+                    {% for child in children %}
+                        <option value = "{{ child.name }}" > {{ child.name }}</option>
+                    {% endfor %}
                 </select>
             </div>
     
