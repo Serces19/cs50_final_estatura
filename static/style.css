@@ -61,7 +61,7 @@ button:active {
 }
 
 .jumbotron {
-    background-image: url('https://images.pexels.com/photos/3038369/pexels-photo-3038369.jpeg');
+    background-image: url('portada.png');
     background-size: cover;
     color: rgb(0, 0, 0);
     text-align: center;

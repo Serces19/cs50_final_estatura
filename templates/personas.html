@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Personas</h2>
+    <div class="row mb-4">
+        <div class="col">
+            <a href="{{ url_for('create_child') }}" class="btn btn-primary">Agregar persona</a>
+        </div>
+    </div>
+    {% if children %}
+    <div class="row">
+        <div class="col">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Género</th>
+                        <th>Fecha de nacimiento</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for child in children %}
+                    <tr>
+                        <td>{{ child.name }}</td>
+                        <td>{{ child.gender }}</td>
+                        <td>{{ child.fecha_nacimiento }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% else %}
+    <div class="row">
+        <div class="col">
+            <p>No hay registros disponibles. Comience agregando un nuevo registro.</p>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+

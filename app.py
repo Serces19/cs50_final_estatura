@@ -129,6 +129,32 @@ def create_child():
     return render_template('create_child.html')
 
 
+@app.route('/personas', methods=['GET', 'POST'])
+def personas():
+    # Verificar si el usuario está autenticado
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+    user_id = session['user_id']
+
+    if request.method == 'POST':
+        name = request.form['name']
+        gender = request.form['gender']
+        fecha_nacimiento = request.form['fecha_nacimiento']
+        estatura_padre = request.form['estatura_padre']
+        estatura_madre = request.form['estatura_madre']
+        ciudad = request.form['ciudad']
+        residencia = request.form['residencia']
+        user_id = session['user_id']
+
+        print(name, gender, fecha_nacimiento, estatura_padre, estatura_madre, ciudad, residencia)
+        new_child = Child(name=name, user_id=user_id, gender=gender, fecha_nacimiento=fecha_nacimiento, estatura_padre=estatura_padre, estatura_madre=estatura_madre, ciudad=ciudad, residencia=residencia)
+        db.session.add(new_child)
+        db.session.commit()
+        return redirect(url_for('personas'))
+    children = Child.query.filter_by(user_id=user_id).all()
+    return render_template('personas.html', children=children)
+
+
 @app.route('/charts')
 def charts():
     if 'user_id' not in session:

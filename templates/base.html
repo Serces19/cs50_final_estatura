@@ -10,31 +10,39 @@
     <link rel="shortcut icon" href="static/favicon.png">
 </head>
 <body>
+
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="{{ url_for('home') }}">Estatura Gráfica</a>
-        <div class="collapse navbar-collapse">
-            <ul class="navbar-nav ml-auto">
-                {% if 'user_id' in session %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('dashboard') }}">Dashboard</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('charts') }}">Gráficas</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
-                    </li>
-                {% else %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('login') }}">Login</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('register') }}">Register</a>
-                    </li>
-                {% endif %}
-            </ul>
+        <div class="container-fluid">
+            <a class="navbar-brand mx-auto" href="{{ url_for('home') }}">Estatura Gráfica</a>
+            <div class="collapse navbar-collapse justify-content-center">
+                <ul class="navbar-nav">
+                    {% if 'user_id' in session %}
+                        <li class="nav-item mx-2">
+                            <a class="nav-link" href="{{ url_for('dashboard') }}">Dashboard</a>
+                        </li>
+                        <li class="nav-item mx-2">
+                            <a class="nav-link" href="{{ url_for('charts') }}">Gráficas</a>
+                        </li>
+                        <li class="nav-item mx-2">
+                            <a class="nav-link" href="{{ url_for('personas') }}">Personas</a>
+                        </li>
+                        <li class="nav-item mx-2">
+                            <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item mx-2">
+                            <a class="nav-link" href="{{ url_for('login') }}">Login</a>
+                        </li>
+                        <li class="nav-item mx-2">
+                            <a class="nav-link" href="{{ url_for('register') }}">Register</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
         </div>
     </nav>
+    
+    
     <div class="container mt-4">
         {% with messages = get_flashed_messages() %}
             {% if messages %}
