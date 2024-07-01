@@ -1,33 +1,43 @@
-# Estatura gráfica
+# Estatura Gráfica
 
-#### Video Demo:  <URL HERE>
+#### Video Demo:  https://youtu.be/ro04sqsz0iY
 #### Description:
-Este proyecto esta destinado a ayudar a los padres a llevar una control preciso de la evolucion de la estatura de sus hijos. En un pais como Bolivia, puede ser complicado para muchas familias acceder a servicios medicos de calidad para llevar un control de la estatura de sus hijos, existen tablas de estatura pero la posibilidad de guardar estos datos en una pagina web y poder a acceder a ellos a lo largo de los años resulta muy valioso
+This project is designed to help parents accurately track the growth of their children's height. In a country like Bolivia, many families may find it challenging to access quality medical services to monitor their children's height. While height charts exist, the ability to store this data on a dedicated web page and access it over the years is extremely valuable for both parents and healthcare providers.
 
+### Architecture
+The project utilizes HTML, CSS, and JavaScript for the frontend, ensuring a responsive and user-friendly interface. UI frameworks such as Bootstrap and Jinja are incorporated to enhance the design and functionality of the site. The backend is constructed using Python with Flask, a lightweight and flexible web framework. The entire application is hosted on PythonAnywhere by Conda, a robust hosting service for Python web applications. Development will be carried out in Google's Cloud IDE, providing a powerful and collaborative environment for coding. This choice allows for rapid and straightforward development, real-time monitoring of changes to the web page, and seamless integration with Google databases for potential deployment.
 
+The database used is SQLite, which will store user records and all persistent information on the web page efficiently. For user authentication and security, an encryption system based on Python's Werkzeug module will be implemented, ensuring that user data is protected.
 
-TODO
-Se escogio Flask por que es un metodo eficiente de desarrollo web. Y por que resulta muy util en ciencia de datos para este proyecto en especifico.
+Flask was chosen for its efficiency in web development and its extensive use in data science, making it particularly suitable for this project. Techniques of machine learning will be utilized, employing libraries such as sklearn, pandas, and numpy. A base template will be employed for all pages, with Jinja extending the contents to maintain consistency and ease of maintenance.
 
-### Arquitectura
-Se usara HTML, CSS y JS en el frontend junto con paquetes de ayuda como Bootstrap y Jinja. Para el Backend se usara python con Flask. Todo correra en pythonanywhere de Conda, un servicio de host para paginas web en python. La Base de datos sera SQLite para guardar los registros de los usuarios. Se usara AWS congnito para la autenticacion de usuarios, ya que es un sistema robusto que permite a los usuarios crear una cuenta facilmente e inciar sesion con google, facebook, etc. 
+The database allows for creating, deleting, editing, and reading records, both for height records and user information. It will consist of three primary tables:
+- **Users**: This table will store user information, including login credentials and personal details.
+- **Child**: This table will contain profiles of the children being tracked, including basic information and relevant details.
+- **Records**: This table will hold the height records and other measurements, linked to the corresponding child profiles.
 
-###Home
-Se muestra la tabla de evolucion de estatura con datos estadisticos generales. Y un boton de llamada a la accion para registrarse y comenzar a guardar un registro de estaturas.
+To simplify interactions with the database, SQL Alchemy will be used alongside Flask.
 
-###Login
-Se implementara un sistema de login para cada usuario que quiera empezar a guardar un registro de estaturas
+### Home
+The home page introduces the site and offers options to log in or register a new user. It features a welcoming interface with a navbar for easy navigation across all pages of the site, providing users with seamless access to various features.
 
-###Registro
-En esta pagina el usuario podra crear un registro de una persona e ir guardando los registros, se podran guardar hasta 50 registros de una misma persona y el usuario podra crear varias personas para guardar sus registros.
+### Login
+A secure login system will be implemented for each user who wants to start recording and tracking height data. This ensures that user data is private and accessible only to authorized individuals.
 
-###Graficas
-Se escogera a una persona para poder ver sus graficas. Las graficas se haran en Seaborn al ser una libreria que simplifica el trabajo con graficas. Estas se renderizaran y mostraran en la interfaz en tiempo real. Con una opaciodad mas baja se mostraran los rangos de estatura promedios en la grafica. 
+### Register
+On the registration page, users can create a detailed profile for an individual and start saving records. Up to 50 records can be saved for the same person, allowing for comprehensive tracking over time. Users can also create multiple profiles to save records for different individuals.
 
-### Calculo de la estaura esperada
-Se calculara la altura esperada a traves de datos estadisticos de varios factores, la hipotesis es que los factores mas importantes son altura del padre, altura de la madre, estatura de los abuelos, estatura de nacimiento, ciudad, deporte, consumo suplementos.
+### Profiles
+Each user must first create a profile for a person before adding records. This section will gather useful data that aids in predicting the individual's final height, such as genetic factors and lifestyle information.
 
-### Unidades de medida
-Se usaran centimetros y meses, y/o años, para facilitar a los usuarios la interpretacion e ingreso de los datos.
+### Charts
+The charts page displays the heights of all individuals in an interactive and visually appealing graph. Users can select which profiles to view, allowing for personalized data visualization. Height ranges and trends will be displayed with lower opacity, providing a clear indication of growth patterns and deviations from the norm, calculated through a regression process.
 
+### Expected Height Calculation
+The expected height will be calculated using statistical data on various influential factors. The hypothesis is that the most significant factors include the height of the father, the height of the mother, the height of the grandparents, birth height, city of residence, sports activities, and supplement consumption. A comprehensive prediction model based on these factors will be created to estimate each person's final height. This model will be used to compare the predicted height with the actual height, offering insights into when medical consultation might be necessary.
+
+### Units of Measurement
+Centimeters and months and/or years will be used to facilitate the interpretation and entry of data by users. When entering data, users can also use a specific date, and the system will automatically calculate the months based on the birth date. This flexibility ensures that users can input data in the most convenient and accurate way possible.
+
+The design of the interface is kept simple to allow parents to perform the desired functions without distractions, focusing on the essential features required for the website's functionality.
 
