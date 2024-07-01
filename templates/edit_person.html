@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-6">
+    {% if person %}
+    <h2 class="mb-4">Editar {{ person.name }}</h2>
+
+    <form method="POST" action="{{ url_for('edit_person', person_id=person.id) }}">
+        <div class="form-group row">
+            <label for="nombre" class="col-sm-3 col-form-label text-right">Nombre:</label>
+            <div class="col-sm-9">
+                <input type="text" class="form-control" id="nombre" name="name" value="{{ person.name }}">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-3 col-form-label text-right">Género:</label>
+            <div class="col-sm-9">
+                <div class="form-check form-check-inline">
+                    <input type="radio" class="form-check-input" id="genero_masculino" name="gender" value="masculino" {% if person.gender == 'masculino' %}checked{% endif %}>
+                    <label class="form-check-label" for="genero_masculino">Masculino</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input type="radio" class="form-check-input" id="genero_femenino" name="gender" value="femenino" {% if person.gender == 'femenino' %}checked{% endif %}>
+                    <label class="form-check-label text-right" for="genero_femenino">Femenino</label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="fecha_nacimiento" class="col-sm-3 col-form-label text-right">Fecha de nacimiento:</label>
+            <div class="col-sm-9">
+                <input type="date" class="form-control" id="fecha_nacimiento" name="fecha_nacimiento" value="{{ person.fecha_nacimiento }}">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="estatura_padre" class="col-sm-3 col-form-label text-right">Estatura del padre (cm):</label>
+            <div class="col-sm-9">
+                <input type="number" class="form-control" id="estatura_padre" name="estatura_padre" value="{{ person.estatura_padre }}">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="estatura_madre" class="col-sm-3 col-form-label text-right">Estatura de la madre (cm):</label>
+            <div class="col-sm-9">
+                <input type="number" class="form-control" id="estatura_madre" name="estatura_madre" value="{{ person.estatura_madre }}">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="ciudad" class="col-sm-3 col-form-label text-right">Ciudad:</label>
+            <div class="col-sm-9">
+                <input type="text" class="form-control" id="ciudad" name="ciudad" value="{{ person.ciudad }}">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="residencia" class="col-sm-3 col-form-label text-right">Lugar de residencia:</label>
+            <div class="col-sm-9">
+                <select id="residencia" name="residencia" class="form-control">
+                    <option value="centro_ciudad" {% if person.residencia == 'centro_ciudad' %}selected{% endif %}>Centro de la ciudad</option>
+                    <option value="zona_residencial" {% if person.residencia == 'zona_residencial' %}selected{% endif %}>Zona residencial</option>
+                    <option value="alejado_ciudad" {% if person.residencia == 'alejado_ciudad' %}selected{% endif %}>Alejado de la ciudad</option>
+                    <option value="zona_rural" {% if person.residencia == 'zona_rural' %}selected{% endif %}>Zona rural</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="color" class="col-sm-3 col-form-label text-right">Elige un color:</label>
+            <div class="col-sm-9">
+                <input type="color" class="form-control" id="color" name="color" value="{{ person.color }}">
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-sm-9 offset-sm-3">
+                <input type="submit" class="btn btn-success" value="Actualizar datos">
+            </div>
+        </div>
+    </form>
+
+    <script>
+        function toggleFechaMedicion() {
+            const registrarPorMeses = document.getElementById('registrar_por_meses').checked;
+            const fechaMedicionGroup = document.getElementById('fecha_medicion_group');
+            const edadMesesGroup = document.getElementById('edad_meses_group');
+            
+            if (registrarPorMeses) {
+                fechaMedicionGroup.style.display = 'none';
+                edadMesesGroup.style.display = 'block';
+            } else {
+                fechaMedicionGroup.style.display = 'block';
+                edadMesesGroup.style.display = 'none';
+            }
+        }
+    </script>
+
+
+    {% else %}
+    <div class="row">
+        <div class="col">
+            <p>No hay registros de esta persona</p>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+

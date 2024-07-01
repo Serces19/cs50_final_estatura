@@ -3,47 +3,76 @@
 {% block content %}
 <div class="row justify-content-center">
     <div class="col-md-6">
-        <h2>Crear nueva persona</h2>
-        <form method="POST" action="{{ url_for('create_child') }}">
-            <label for="nombre">Nombre:</label>
-            <input type="text" class="form-control" id="nombre" name="name"><br>
-        
-            <label for="genero">Género:</label>
-            <input type="radio" class="form-control" id="genero_masculino" name="gender" value="masculino">
-            <label for="genero_masculino">Masculino</label>
-            <input type="radio" class="form-control" id="genero_femenino" name="gender" value="femenino">
-            <label for="genero_femenino">Femenino</label><br>
-        
-            <label for="fecha_nacimiento">Fecha de nacimiento:</label>
-            <input type="date" class="form-control" id="fecha_nacimiento" name="fecha_nacimiento"><br>
-        
-            <label for="estatura_padre">Estatura del padre (cm):</label>
-            <input type="number" class="form-control" id="estatura_padre" name="estatura_padre"><br>
-        
-            <label for="estatura_madre">Estatura de la madre (cm):</label>
-            <input type="number" class="form-control" id="estatura_madre" name="estatura_madre"><br>
-        
-            <label for="ciudad">Ciudad:</label>
-            <input type="text" class="form-control" id="ciudad" name="ciudad"><br>
-        
-            <div class="form-group">
-                <label for="residencia">Lugar de residencia:</label>
-                <select id="residencia" name="residencia" class="form-control">
-                    <option value="centro_ciudad">Centro de la ciudad</option>
-                    <option value="zona_residencial">Zona residencial</option>
-                    <option value="alejado_ciudad">Alejado de la ciudad</option>
-                    <option value="zona_rural">Zona rural</option>
-                </select><br>
-            </div>
+        <h2 class="mb-4">Crear nueva persona</h2>
 
-            <div class="form-group">
-                <label for="color">Elige un color:</label>
-                <input type="color" id="color" name="color">
-            </div>
+            <form method="POST" action="{{ url_for('create_child') }}">
+                <div class="form-group row">
+                    <label for="nombre" class="col-sm-3 col-form-label text-right">Nombre:</label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" id="nombre" name="name">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label text-right">Género:</label>
+                    <div class="col-sm-9">
+                        <div class="form-check form-check-inline">
+                            <input type="radio" class="form-check-input" id="genero_masculino" name="gender" value="masculino">
+                            <label class="form-check-label" for="genero_masculino">Masculino</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input type="radio" class="form-check-input" id="genero_femenino" name="gender" value="femenino">
+                            <label class="form-check-label text-right" for="genero_femenino">Femenino</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="fecha_nacimiento" class="col-sm-3 col-form-label text-right">Fecha de nacimiento:</label>
+                    <div class="col-sm-9">
+                        <input type="date" class="form-control" id="fecha_nacimiento" name="fecha_nacimiento">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="estatura_padre" class="col-sm-3 col-form-label text-right">Estatura del padre (cm):</label>
+                    <div class="col-sm-9">
+                        <input type="number" class="form-control" id="estatura_padre" name="estatura_padre">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="estatura_madre" class="col-sm-3 col-form-label text-right">Estatura de la madre (cm):</label>
+                    <div class="col-sm-9">
+                        <input type="number" class="form-control" id="estatura_madre" name="estatura_madre">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="ciudad" class="col-sm-3 col-form-label text-right">Ciudad:</label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" id="ciudad" name="ciudad">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="residencia" class="col-sm-3 col-form-label text-right">Lugar de residencia:</label>
+                    <div class="col-sm-9">
+                        <select id="residencia" name="residencia" class="form-control">
+                            <option value="centro_ciudad">Centro de la ciudad</option>
+                            <option value="zona_residencial">Zona residencial</option>
+                            <option value="alejado_ciudad">Alejado de la ciudad</option>
+                            <option value="zona_rural">Zona rural</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="color" class="col-sm-3 col-form-label text-right">Elige un color:</label>
+                    <div class="col-sm-9">
+                        <input type="color" class="form-control" id="color" name="color">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-9 offset-sm-3">
+                        <input type="submit" class="btn btn-primary" value="Enviar">
+                    </div>
+                </div>
+            </form>
 
-            <input type="submit" class="btn btn-primary" value="Enviar">
-
-        </form>
     
         <script>
             function toggleFechaMedicion() {

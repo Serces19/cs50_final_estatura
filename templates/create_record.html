@@ -3,54 +3,122 @@
 {% block content %}
 <div class="row justify-content-center">
     <div class="col-md-6">
-        <h2>Crear Registro de Estatura</h2>
+        <h2 class="mb-4">Agregar Registro de Estatura</h2>
+
         <form method="POST" action="{{ url_for('create_record') }}">
-            <div class="form-group">
-                <label for="name">Nombre de la persona:</label>
-                <select name="name" id="name" class="form-control">
-                    {% for child in children %}
-                        <option value = "{{ child.name }}" > {{ child.name }}</option>
-                    {% endfor %}
-                </select>
+            <div class="form-group row">
+                <label for="name" class="col-sm-3 col-form-label text-right">Nombre:</label>
+                <div class="col-sm-9">
+                    <select name="name" id="name" class="form-control">
+                        {% for child in children %}
+                            <option value="{{ child.name }}">{{ child.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
             </div>
-    
-            <div class="form-group checkbox-group">
-                <input type="checkbox" id="registrar_por_meses" onclick="toggleFechaMedicion()">
-                <label for="registrar_por_meses">Registrar por edad en meses</label>
+        
+            <!-- <div class="form-group row">
+                <label for="toggle_switch" class="col-sm-3 col-form-label text-right">Usar fecha</label>
+                <div class="col-sm-9">
+                    <label class="switch">
+                        <input type="checkbox" id="toggle_switch">
+                        <span class="slider round"></span>
+                    </label>
+                </div>
             </div>
-    
-            <div class="form-group" id="fecha_medicion_group">
-                <label for="fecha_medicion"> Fecha de medición: </label>
-                <input type="date" class="form-control" id="fecha_medicion" name="fecha_medicion">
+            
+            
+            <div class="form-group row" id="fecha_medicion_group">
+                <label for="fecha_medicion" class="col-sm-3 col-form-label text-right">Fecha medición</label>
+                <div class="col-sm-9">
+                    <input type="date" class="form-control" id="fecha_medicion" name="fecha_medicion" disabled>
+                </div>
             </div>
-    
-            <div class="form-group" id="edad_meses_group" style="display: none;">
-                <label for="edad_meses">Edad en meses:</label>
-                <input type="number" id="month" class="form-control" min="0" name="month" step="1" required>
+            
+            <div class="form-group row" id="edad_meses_group">
+                <label for="edad_meses" class="col-sm-3 col-form-label text-right">Edad en meses:</label>
+                <div class="col-sm-9">
+                    <input type="number" id="month" class="form-control" min="0" name="month" step="1" disabled>
+                </div>
+            </div> -->
+
+
+            <div class="form-group row" id="fecha_medicion_group">
+                <label for="fecha_medicion" class="col-sm-3 col-form-label text-right">Fecha medición:</label>
+                <div class="col-sm-6">
+                    <input type="date" id="fecha_medicion" class="form-control" name="fecha_medicion" disabled>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="checkbox_fecha_medicion">
+                    </div>
+                </div>
             </div>
-    
-            <div class="form-group">
-                <label for="height">Estatura (cm):</label>
-                <input type="number" id="height" step="0.1" min="0" class="form-control" name="height" required>
+            
+            <div class="form-group row" id="edad_meses_group">
+                <label for="edad_meses" class="col-sm-3 col-form-label text-right">Edad en meses:</label>
+                <div class="col-sm-6">
+                    <input type="number" id="month" class="form-control" min="0" name="month" step="1" required>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="checkbox_edad_meses" checked>
+                    </div>
+                </div>
             </div>
-    
-            <button type="submit" class="btn btn-primary">Guardar</button>
+
+        
+            <div class="form-group row">
+                <label for="height" class="col-sm-3 col-form-label text-right">Estatura (cm):</label>
+                <div class="col-sm-9">
+                    <input type="number" id="height" step="0.1" min="0" class="form-control" name="height" required>
+                </div>
+            </div>
+        
+            <div class="form-group row">
+                <div class="col-sm-9 offset-sm-3">
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+            </div>
         </form>
-    
+
         <script>
-            function toggleFechaMedicion() {
-                const registrarPorMeses = document.getElementById('registrar_por_meses').checked;
-                const fechaMedicionGroup = document.getElementById('fecha_medicion_group');
-                const edadMesesGroup = document.getElementById('edad_meses_group');
-                
-                if (registrarPorMeses) {
-                    fechaMedicionGroup.style.display = 'none';
-                    edadMesesGroup.style.display = 'block';
-                } else {
-                    fechaMedicionGroup.style.display = 'block';
-                    edadMesesGroup.style.display = 'none';
+            document.addEventListener('DOMContentLoaded', function() {
+                const checkboxFechaMedicion = document.getElementById('checkbox_fecha_medicion');
+                const checkboxEdadMeses = document.getElementById('checkbox_edad_meses');
+                const fechaMedicionInput = document.getElementById('fecha_medicion');
+                const mesesInput = document.getElementById('month');
+        
+                // Función para desmarcar el otro checkbox y deshabilitar el campo correspondiente
+                function toggleCheckbox(checkbox_cambiado, checkbox, inputField_cambiado, inputField) {
+                    if (checkbox_cambiado.checked) {
+                        checkbox_cambiado.required = true;
+                        checkbox.checked = false;
+                        checkbox.required = false;
+                        inputField_cambiado.disabled = false;
+                        inputField.disabled = true;
+                    } else {
+                        checkbox_cambiado.required = false;
+                        checkbox.required = true;
+                        checkbox.checked = true;
+                        inputField_cambiado.disabled = true;
+                        inputField.disabled = false;
+                    }
                 }
-            }
+        
+                // Event listeners para controlar los checkboxes y los campos de entrada
+                checkboxFechaMedicion.addEventListener('change', function() {
+                    toggleCheckbox(checkboxFechaMedicion, checkboxEdadMeses, fechaMedicionInput, mesesInput);
+                });
+        
+                checkboxEdadMeses.addEventListener('change', function() {
+                    toggleCheckbox(checkboxEdadMeses, checkboxFechaMedicion, mesesInput, fechaMedicionInput);
+                });
+                fechaMedicionInput.disabled = true;
+                checkboxFechaMedicion.checked = false;
+                mesesInput.disabled = false;
+                checkboxEdadMeses.checked = true;
+            });
         </script>
     </div>
 </div>

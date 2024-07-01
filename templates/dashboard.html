@@ -19,7 +19,7 @@
 </script>
 
 <div class="container mt-4">
-    <h2>Dashboard</h2>
+    <h2 class="mb-4">Dashboard</h2>
     </div>
 
     <form>
@@ -43,21 +43,21 @@
     {% if records %}
     <div class="row">
         <div class="col">
-            <table class="table table-striped">
+            <table class="table table-striped table-borderless table-hover">
                 <thead>
                     <tr>
+                        <th>Persona</th>
                         <th>Edad (meses)</th>
                         <th>Estatura (cm)</th>
-                        <th>Persona</th>
-                        <th>Acciones</th>
+                        <th>Eliminar</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody class="table-group-divider">
                     {% for record, child_name in records %}
                         <tr data-child-name="{{ child_name }}">
+                            <td>{{ child_name }}</td>
                             <td>{{ record.month }}</td>
                             <td>{{ record.height }}</td>
-                            <td>{{ child_name }}</td>
                             <td>
                                 <form action="{{ url_for('delete_record', record_id=record.id) }}" method="post" style="display:inline;">
                                     <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>

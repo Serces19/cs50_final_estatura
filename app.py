@@ -1,10 +1,12 @@
 import os
 import json
+from datetime import datetime
 from flask import Flask, render_template, redirect, url_for, request, session, flash
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import joinedload
 from werkzeug.security import generate_password_hash, check_password_hash
 
+from helpers import calcular_meses_de_vida
 
 ###############################################################################################################
 
@@ -16,6 +18,7 @@ db = SQLAlchemy(app)
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(30), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(60), nullable=False)
     children = db.relationship('Child', backref='user', lazy=True)
@@ -24,12 +27,13 @@ class Child(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(30), nullable=False)
     gender = db.Column(db.String(12), nullable=False)
-    fecha_nacimiento = db.Column(db.Integer, nullable=False)
+    fecha_nacimiento = db.Column(db.Date, nullable=False)
     estatura_padre = db.Column(db.Integer, nullable=False)
     estatura_madre = db.Column(db.Integer, nullable=False)
     ciudad = db.Column(db.String(30), nullable=False)
     residencia = db.Column(db.String(30), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    color = db.Column(db.String(12), nullable=False)
     records = db.relationship('Record', backref='child', lazy=True)
 
 class Record(db.Model):
@@ -67,8 +71,9 @@ def login():
 def register():
     if request.method == 'POST':
         email = request.form['email']
+        name = request.form['name']
         password = generate_password_hash(request.form['password'])
-        new_user = User(email=email, password=password)
+        new_user = User(email=email, name=name, password=password)
         db.session.add(new_user)
         db.session.commit()
         return redirect(url_for('login'))
@@ -95,9 +100,19 @@ def dashboard():
 def create_record():
     if request.method == 'POST':
         name = request.form['name']
-        height = request.form['height']
-        month = request.form['month']
         child_id = Child.query.filter_by(name=name).first().id
+        fecha_nacimiento = Child.query.filter_by(name=name).first().fecha_nacimiento
+        height = request.form['height']
+
+        try:
+            month = request.form['month']
+        except:
+            fecha_medicion = request.form['fecha_medicion']
+            fecha_nacimiento = fecha_nacimiento.strftime('%Y-%m-%d')
+            month = calcular_meses_de_vida(fecha_nacimiento, fecha_medicion)
+            month = int(month)
+
+        
         print('LOS DATOS SON', name, height, month, child_id)
         new_record = Record(height=height, month=month, name=name, child_id=child_id)
         db.session.add(new_record)
@@ -115,17 +130,19 @@ def create_child():
         name = request.form['name']
         gender = request.form['gender']
         fecha_nacimiento = request.form['fecha_nacimiento']
+        fecha_nacimiento = datetime.strptime(fecha_nacimiento, '%Y-%m-%d').date()
         estatura_padre = request.form['estatura_padre']
         estatura_madre = request.form['estatura_madre']
         ciudad = request.form['ciudad']
         residencia = request.form['residencia']
+        color = request.form['color']
         user_id = session['user_id']
 
         print(name, gender, fecha_nacimiento, estatura_padre, estatura_madre, ciudad, residencia)
-        new_child = Child(name=name, user_id=user_id, gender=gender, fecha_nacimiento=fecha_nacimiento, estatura_padre=estatura_padre, estatura_madre=estatura_madre, ciudad=ciudad, residencia=residencia)
+        new_child = Child(name=name, user_id=user_id, gender=gender, color=color, fecha_nacimiento=fecha_nacimiento, estatura_padre=estatura_padre, estatura_madre=estatura_madre, ciudad=ciudad, residencia=residencia)
         db.session.add(new_child)
         db.session.commit()
-        return redirect(url_for('dashboard'))
+        return redirect(url_for('personas'))
     return render_template('create_child.html')
 
 
@@ -154,6 +171,43 @@ def personas():
     children = Child.query.filter_by(user_id=user_id).all()
     return render_template('personas.html', children=children)
 
+@app.route('/edit_person/<int:person_id>', methods=['GET', 'POST'])
+def edit_person(person_id):
+    # Verificar si el usuario está autenticado
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+    user_id = session['user_id']
+
+    if request.method == 'POST':
+        print('Ejecutando POST')
+        name = request.form['name']
+        gender = request.form['gender']
+        fecha_nacimiento = request.form['fecha_nacimiento']
+        fecha_nacimiento = datetime.strptime(fecha_nacimiento, '%Y-%m-%d')
+        estatura_padre = request.form['estatura_padre']
+        estatura_madre = request.form['estatura_madre']
+        ciudad = request.form['ciudad']
+        residencia = request.form['residencia']
+        color = request.form['color']
+        user_id = session['user_id']
+
+        print(name, gender, fecha_nacimiento, estatura_padre, estatura_madre, ciudad, residencia)
+
+        child = Child.query.get_or_404(person_id)
+        child.name = name
+        child.gender = gender
+        child.fecha_nacimiento = fecha_nacimiento
+        child.estatura_padre = estatura_padre
+        child.estatura_madre = estatura_madre
+        child.ciudad = ciudad
+        child.residencia = residencia
+        child.color = color
+
+        db.session.commit()
+        return redirect(url_for('personas'))
+
+    person = Child.query.filter_by(id=person_id).first()
+    return render_template('edit_person.html', person=person)
 
 @app.route('/charts')
 def charts():
@@ -165,7 +219,10 @@ def charts():
     children = Child.query.filter_by(user_id=user_id).all()
     children_list = []
     for child in children:
-        children_list.append(child.name)
+        child_color = child.color
+        child_name = child.name
+        child_color_name = [child_name, child_color]
+        children_list.append(child_color_name)
 
     # Realizar una consulta combinada para obtener todos los registros del usuario con el nombre del niño
     records_with_child_name = db.session.query(Record, Child.name)\
@@ -218,6 +275,24 @@ def delete_record(record_id):
     db.session.commit()
     flash('Registro eliminado correctamente', 'success')
     return redirect(url_for('dashboard'))
+
+
+@app.route('/delete_person/<int:person_id>', methods=['POST'])
+def delete_person(person_id):
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+    
+    current_user = session['user_id']
+    person = Child.query.get_or_404(person_id)
+
+    # Eliminar registros asociados de la tabla Record
+    for record in person.records:
+        db.session.delete(record)
+
+    db.session.delete(person)
+    db.session.commit()
+    flash('Persona eliminada correctamente', 'success')
+    return redirect(url_for('personas'))
 
 
 @app.route('/logout')

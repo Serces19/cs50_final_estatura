@@ -40,6 +40,7 @@
             return heights;
         }
 
+
         /////////////////////////////  Datos  /////////////////////////////////// 
         const meses_esperado = {{ meses_esperado|safe}};
         const estatura_esperado = {{ estatura_esperado|safe}};
@@ -65,16 +66,16 @@
         children.forEach(child => {
             console.log(child);
             // Obtener los datos específicos del registro
-            let months = GetMonths(child, records);
-            let heights = GetHieght(child, records);
+            let months = GetMonths(child[0], records);
+            let heights = GetHieght(child[0], records);
+
 
             // Crear un nuevo dataset para este registro
             let newDataset = {
-                label: child,
+                label: child[0],
                 data: months.map((month, index) => ({ x: month, y: heights[index] })), 
-                borderColor: 'rgba(70, 180, 230, 0.8)',
+                borderColor: child[1],
                 borderWidth: 3,
-                fill: true
             };
 
             // Agregar el nuevo dataset a la lista de datasets
